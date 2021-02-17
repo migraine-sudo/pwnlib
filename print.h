@@ -44,10 +44,26 @@ public:
     void str_(string str) { print_str = str; }
     void out_()
     {
+        out_line_();
+        cout << endl;
+    }
+    void out_(string str)
+    {
+        out_line_(str);
+        cout << endl;
+    }
+    void out_line_()
+    {
         set_color(this->color);
         cout << print_str; 
         set_color(DEFAULT);
-        cout << endl;
+    }
+    void out_line_(string str)
+    {
+        this->print_str=str;
+        set_color(this->color);
+        cout << print_str; 
+        set_color(DEFAULT);
     }
     inline void out_format_(PRINT_FORMAT format);
     inline void color_(const int color) { this->color = color; } // F_BLACK F_RED F_GREEN ...

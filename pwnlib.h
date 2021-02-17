@@ -3,18 +3,25 @@
 
 #define MAX_SIZE 1000
 #define MAX_PIPE_TIME 1000
+#define NODE_MAX_NUM 10
 #include "node.h"
 #include "print.h"
 
 #include <iostream>
+#include <fstream>
 #include <unistd.h>
 #include <fcntl.h>
 
 #include <string>
+#include <stack>
+#include <map>
 #include <cstring>
 #include <ctime>
 
 using namespace std;
+
+inline string select_line(string str,int x);
+
 
 enum FORMAT
 {
@@ -34,14 +41,12 @@ enum FD
 }; //define filedis
 
 /* template class PWN */
-//Class PWN struction in order to analyse the Executable file and generate
-//a python Script to help user write exploit quicker and easier. This class also provide
-//several funciton to interact with child process(loaded with our Executive file),
-//A bit like pwntools.
-//While user need provide a Parse_Mod for this class to analyse
+//Class PWN struction in order to analyse the Executable file and generate.
+//This class also provide several funciton to interact with child process(loaded with our Executive file),
+//A bit like pwntools.While user need provide a Parse_Mod for this class to analyse
 //the programm or use the initial version.
 //Example:
-//
+//PWN<Auto_Mod> *p = new PWN<Auto_Mod>(string("../bin/test"));
 template <class Parse_Mod>
 class PWN
 {
@@ -51,6 +56,8 @@ public:
     const char *get_path_c_char() { return path.c_str(); }
     FORMAT get_form_() const { return form; }
     ARCH get_arch_() const { return arch; }
+    ///////////////////////////////////////
+    /*       the tools of PWNlib         */
     inline bool load_();
     inline char *recv_();
     inline char *recv_line_();
@@ -58,6 +65,12 @@ public:
     inline bool send_line_(string str);
     inline void analyze_();
     inline void analyze_manual_();
+    inline void show_node_list_();
+    inline void gengerate_();
+
+protected:
+    Node<string> node_list[NODE_MAX_NUM]; // store the node list
+    int round{0};                         // analyse round
 
 private:
     string path; //path to executable file
@@ -65,8 +78,9 @@ private:
     ARCH arch;   // architecture of executable file
     pid_t pid;   //pid for child process
     int fd[2], fd2[2];
-    Node<int> node;
 };
+
+
 
 template <class Parse_Mod>
 inline bool PWN<Parse_Mod>::load_()
@@ -247,6 +261,7 @@ inline bool PWN<Parse_Mod>::send_line_(string str)
 #endif
     }
 }
+
 //Analyse the Executable file and Store the infomation to Node,
 //this rule will follow the class "Parse_Mod",you can override
 //the functions in "Parse_Mod" ,so that you can improve the performance
@@ -255,38 +270,6 @@ inline bool PWN<Parse_Mod>::send_line_(string str)
 //这样不仅能够方便代码共享，也能方便使用者重构分析逻辑。
 template <class Parse_Mod>
 inline void PWN<Parse_Mod>::analyze_()
-{
-    Parse_Mod mod;
-    char *tmp_buf, *out_buf;
-    cout << "[*] Analysing ... " << endl;
-    do
-    {
-        static int i{-1};
-        static int j{0};
-        if (!mod.if_loaded_())
-        {
-            i++;
-            j = 0;
-            mod.load_(this->load_());
-            mod.menu_buf_() = string(mod.recv_(this->recv_()));
-            this->send_line_(mod.send_(i));
-        }
-        else
-        {
-            j++;
-            mod.recv_(this->recv_());
-            this->send_line_(mod.send_(i));
-            //cout << "j = " << j << endl;
-            if (j >= 5)
-                mod.abort_();
-        }
-    } while (!mod.if_abort_());
-    cout << "[*] Analysing finished!" << endl;
-    ;
-}
-
-template <class Parse_Mod>
-inline void PWN<Parse_Mod>::analyze_manual_()
 {
     Parse_Mod mod;
     char *tmp_buf, *out_buf;
@@ -322,4 +305,154 @@ inline void PWN<Parse_Mod>::analyze_manual_()
     out2.color_(F_YELLOW);
     out2.out_();
 }
+
+template <class Parse_Mod>
+inline void PWN<Parse_Mod>::analyze_manual_()
+{
+    Parse_Mod mod;
+    char *tmp_buf, *out_buf;
+    mod.load_node_list_(this->node_list); //load the contants for analysing result
+
+    Print out1("[*] Analysing ... ");
+    out1.color_(F_YELLOW);
+    out1.out_();
+
+    do
+    {
+        static int i{-1};
+        static int j{0};
+        if (!mod.if_loaded_())
+        {
+            i++;
+            j = 0;
+            mod.load_(this->load_());
+            mod.menu_buf_() = string(mod.recv_(this->recv_()));
+            this->send_line_(mod.send_(i));
+        }
+        else
+        {
+            j++;
+            mod.recv_(this->recv_());
+            this->send_line_(mod.send_(i));
+            //cout << "j = " << j << endl;
+            if (j >= 5)
+                mod.abort_();
+        }
+    } while (!mod.if_abort_());
+
+    //cout << "[*] Analysing finished!" << endl;
+    Print out2("[*] Analysing finished!");
+    out2.color_(F_YELLOW);
+    out2.out_();
+
+    //mod.show_node_list_();
+    this->round=mod.get_round_();
+    show_node_list_();
+}
+
+template <class Parse_Mod>
+inline void PWN<Parse_Mod>::show_node_list_()
+{
+    int i{0};
+    Print out;
+    out.str_("Results after analysis");
+    out.out_();
+    while (i <= this->round)
+    {
+        out.out_("Round " + to_string(i + 1) + " : ");
+        for (auto iter : node_list[i].node_map_())
+        {
+            //cout << iter.first << iter.second << endl;
+            out.str_(iter.first);
+            out.out_format_(BLOCK);
+            out.str_(string("\t|\n\t-->") + iter.second);
+            out.out_();
+        }
+        i++;
+    }
+}
+
+
+
+template <class Parse_Mod>
+inline void PWN<Parse_Mod>::gengerate_()
+{
+    Print out;
+    out.color_(F_YELLOW);
+    out.out_("[*] generating Python Script");
+    sleep(1);
+    int i{0};
+    ofstream outfile;
+    outfile.open("exploit.py");
+    outfile << "#!/usr/bin/python\n";
+    outfile << "#======PWNlib Script=======\n";
+    outfile << "from pwn import *\n";
+    outfile << "p=process([\"" << this->path << "\"] , env = {\"LD_PRELOAD\":\"/glibc/2.29/64/lib/libc.so.6\"})" <<endl;
+    outfile << "debug=1\nif debug:\n\tcontext.log_level='Debug'\n\tcontext.terminal=context.terminal = ['tmux','splitw','-h' ]\n\tgdb.attach(p)" << endl;
+    outfile << "else:\n\tp=remote(\"ip_address\",ip_port)"<<endl;
+    outfile << "r  = lambda data	:p.recv(data)\nru = lambda data 	:p.recvuntil(data)\ns  = lambda data	:p.send(data)\nsl = lambda data	:p.sendline(data)"<<endl;
+    outfile << endl;
+    while(i <= round)
+    {
+        int j{0};
+        for (auto iter : node_list[i].node_map_())
+            j++;
+
+        //func1(arg1,arg2):
+        outfile << "def func"+to_string(i+1)+"(";
+        for(int x{0} ; x < j-1 ; x++)
+        {
+            outfile << "arg"+to_string(x+1);
+            if(x!=j-2) outfile << ",";
+        }
+        outfile << "):\n";
+        //  recvuntil
+        stack<string> stack1,stack2;
+        for(auto iter : node_list[i].node_map_())
+        {
+            stack1.push(select_line(iter.first,1));
+            stack2.push(iter.second);
+            //outfile << "\tru(\"" << select_line(iter.first,1) << "\")" << endl;
+            //outfile << "\tsl(\'" << iter.second << "\')" << endl;
+        }
+        bool first {false};
+        int t {0};
+        while(!stack1.empty() && !stack2.empty())
+        {
+            outfile << "\tru(\"" << stack1.top() << "\")" << endl;
+            if(first == false)
+            {
+                outfile << "\tsl(\'" << stack2.top() << "\')" << endl;
+                first = true;
+            }
+            else
+            {
+                outfile << "\tsl(" << "arg" << to_string(t) << ")" << endl; 
+            }
+            t++;
+            stack1.pop();
+            stack2.pop();
+        }
+        i++;
+    }
+
+    outfile << "p.interactive()";
+    out.out_("[+] generate finish");
+}
+
+inline string select_line(string str,int x)
+{
+    int pos1{0}, pos2{0}, i{1};
+    string split = "\n";
+    string tmp_str;
+    while ((pos2 = str.find(split, pos1)) >= 0 && i <= x)
+    {
+        tmp_str = str.substr(pos1, pos2 - pos1);
+        pos1 = pos2 + 1;
+        i++;
+    }
+    return tmp_str;
+}
+
+
 #endif

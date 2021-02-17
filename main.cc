@@ -16,6 +16,13 @@ string exec_path;
 
 int main()
 {
+    //How to use ?
+    //Customize functions by writing defaults or defining templates
+    //For Example,
     PWN<Auto_Mod> *p = new PWN<Auto_Mod>(string("../bin/test"));
+
+    //PWN<Half_Auto_Mod> *p=new PWN<Half_Auto_Mod>(string("../bin/test"));
     p->analyze_manual_();
+    p->gengerate_();
+
 }
