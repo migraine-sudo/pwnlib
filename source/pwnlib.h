@@ -143,7 +143,7 @@ inline char *PWN<Parse_Mod>::recv_()
 {
     if (!this->pid)
     {
-        cout << "[^] Error in recv , you need to use load_() first." << endl;
+        cout << "[^] Error in recv , the Executable file load_() error." << endl;
         exit(0);
     }
     sleep(1);
