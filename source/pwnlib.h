@@ -6,6 +6,7 @@
 #define NODE_MAX_NUM 10
 #include "node.h"
 #include "print.h"
+#include "Mstring.h"
 
 #include <iostream>
 #include <fstream>
@@ -19,8 +20,6 @@
 #include <ctime>
 
 using namespace std;
-
-inline string select_line(string str,int x);
 
 
 enum FORMAT
@@ -410,9 +409,9 @@ inline void PWN<Parse_Mod>::gengerate_()
         stack<string> stack1,stack2;
         for(auto iter : node_list[i].node_map_())
         {
-            stack1.push(select_line(iter.first,1));
+            stack1.push(mstr::select_line(iter.first,1));
             stack2.push(iter.second);
-            //outfile << "\tru(\"" << select_line(iter.first,1) << "\")" << endl;
+            //outfile << "\tru(\"" << mstr::select_line(iter.first,1) << "\")" << endl;
             //outfile << "\tsl(\'" << iter.second << "\')" << endl;
         }
         bool first {false};
@@ -439,7 +438,7 @@ inline void PWN<Parse_Mod>::gengerate_()
     outfile << "p.interactive()";
     out.out_("[+] generate finish");
 }
-
+/*
 inline string select_line(string str,int x)
 {
     int pos1{0}, pos2{0}, i{1};
@@ -453,6 +452,7 @@ inline string select_line(string str,int x)
     }
     return tmp_str;
 }
+*/
 
 
 #endif

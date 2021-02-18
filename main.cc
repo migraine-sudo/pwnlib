@@ -19,7 +19,9 @@ int main()
     //How to use ?
     //Customize functions by writing defaults or defining templates
     //For Example,
-    PWN<Auto_Mod> *p = new PWN<Auto_Mod>(string("test/test"));
+    cout << "Input your file << ";
+    cin >> exec_path;
+    PWN<Auto_Mod> *p = new PWN<Auto_Mod>(exec_path);
 
     p->analyze_manual_();
     p->gengerate_();

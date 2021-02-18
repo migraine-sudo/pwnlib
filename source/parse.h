@@ -5,11 +5,9 @@
 
 #include "node.h"
 #include "print.h"
+#include "Mstring.h"
 #include <string>
 #include <vector>
-
-template <class T>
-inline bool in(vector<T> pattern, T str);
 
 /*
  * LIST : Auto_Mod(develping)  Half_Auto_Mod
@@ -56,7 +54,7 @@ private:
 
 inline void Parse_Mod::insert_node_list_(string y)
 {
-    if (!in<string>(this->command, y) && !(this->last_data.empty()))
+    if (!mstr::in<string>(this->command, y) && !(this->last_data.empty()))
     {
         this->node_list[this->round].insert(this->last_data, y);
     }
@@ -107,7 +105,10 @@ public:
 //judging whether the program outputs menu information
 inline string Auto_Mod::recv_(string str)
 {
-    if (menu_buf_() == str) // Judge if the program has been run for one round.
+    //cout << "line of " <<str  << " = "<<line_of_string(str) << endl;
+    //if (menu_buf_() == str) // Judge if the program has been run for one round.
+    
+    if(mstr::Traverse_string(menu_buf_(),str)) //Use Traverse_string to  Determine the similarity of two strings
     {
         this->load_(false);
         this->round++;
@@ -152,7 +153,7 @@ public:
 
 inline string Half_Auto_Mod::recv_(string str)
 {
-    if (menu_buf_() == str) //Non-mandatory judgment, give opinions
+    if (mstr::Traverse_string(menu_buf_(),str)) //Non-mandatory judgment, give opinions
     {
         cout << "AI:Maybe you should input : finish or quit" << endl;
         menu_buf_() = string("raw");
@@ -168,7 +169,7 @@ inline string Half_Auto_Mod::send_(int i)
     out.color_(F_BLUE);
     out.out_line_();
     cin >> cmd;
-    while (in<string>(command, cmd))
+    while (mstr::in<string>(command, cmd))
     {
         if (cmd == string("help") || cmd == string("h"))
             out.out_("DATA:\ndata such as 1 ,a ,A \nCommand: \n\"help\",\"h\" : \t\t print help list \n\"quit\",\"q\" : \t\t quit the program \n\"finish \",\"f\" : \t Tell our analyse program , one round finish ");
@@ -189,18 +190,6 @@ inline string Half_Auto_Mod::send_(int i)
     }
     insert_node_list_(cmd);   
     return cmd; 
-}
-
-//Extend...
-template <class T>
-inline bool in(vector<T> pattern, T str)
-{
-    for (auto iter : pattern)
-    {
-        if (str == iter)
-            return true;
-    }
-    return false;
 }
 
 #endif
