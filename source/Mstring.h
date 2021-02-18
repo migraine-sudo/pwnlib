@@ -39,8 +39,8 @@ inline bool Traverse_string(string str1 ,string str2)
             }
        }    
     }
-    cout << "count =" << count;
-    cout << "line =" << std::max(line1,line2);
+    //cout << "count =" << count;
+    //cout << "line =" << std::max(line1,line2);
     if(count >= std::max(line1,line2)/2)
         return true;
     else
