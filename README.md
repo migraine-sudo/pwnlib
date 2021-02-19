@@ -3,7 +3,7 @@
 *基于C ++的二进制文件分析和CTF pwn利用代码生成框架。*
 *玩得开心!*
 
-![label1](https://img.shields.io/badge/build-makefile-COLOR)
+![label1](https://img.shields.io/badge/build-passing-COLOR)
 [![label2](https://img.shields.io/badge/author-migraine-blue)](https://migraine-sudo.github.io/)
 
 
