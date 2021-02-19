@@ -5,6 +5,7 @@
 
 ![label1](https://img.shields.io/badge/build-passing-COLOR)
 [![label2](https://img.shields.io/badge/author-migraine-blue)](https://migraine-sudo.github.io/)
+[![label3](https://img.shields.io/badge/yaml--cpp-0.6.0-orange)](https://github.com/jbeder/yaml-cpp)
 
 
 [README-En](https://github.com/migraine-sudo/pwnlib/blob/main/README-en.md)
