@@ -9,6 +9,7 @@ Author : Migraine-sudo
 #include "source/pwnlib.h"
 #include "source/parse.h"
 #include "source/print.h"
+#include "source/Myaml.h"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -19,6 +20,8 @@ int main()
     //How to use ?
     //Customize functions by writing defaults or defining templates
     //For Example,
+
+    //M_Yaml yaml;
     cout << "Input your file << ";
     cin >> exec_path;
     PWN<Auto_Mod> *p = new PWN<Auto_Mod>(exec_path);

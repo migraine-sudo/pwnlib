@@ -1,11 +1,19 @@
 # Makefile for Pwnlib
+CROSS =
+CC := $(CROSS)gcc
+CXX := $(CROSS)g++
+DEBUG = -D__DEBUG__
+CFLAGS = $(DEBUG) --std=c++11 -w
+RM = rm -rf
 
-CC := gcc
-CXX := g++
-
+VERSION = 0.0.2
+TARGET = pwn.$(VERSION)
+OBJS = main.cc
+INCLUDE = -I include/
+LIB = lib/libyaml-cpp.a
 #PWN
-pwn: main.cc
-	$(CXX) main.cc -o pwn --std=c++11 -D__DEBUG__ -w	
+$(TARGET): 
+	$(CXX) $(OBJS) $(CFLAGS) -o $@ $(INCLUDE) $(LIB)
 
 #Demo
 demo_auto_debug: demo_auto.cc
@@ -19,4 +27,4 @@ demo_half_auto_debug: demo_half_auto.cc
 
 
 clean:
-	rm *.o pwn auto_pwn half_auto_pwn
+	$(RM) $(TARGET) *.o
