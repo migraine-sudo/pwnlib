@@ -66,6 +66,7 @@ public:
     inline void analyze_manual_();
     inline void show_node_list_();
     inline void gengerate_();
+    inline void gengerate_(string file_name);
 
 protected:
     Node<string> node_list[NODE_MAX_NUM]; // store the node list
@@ -272,10 +273,12 @@ inline void PWN<Parse_Mod>::analyze_()
 {
     Parse_Mod mod;
     char *tmp_buf, *out_buf;
-    //cout << "[*] Analysing ... " << endl;
+    mod.load_node_list_(this->node_list); //load the contants for analysing result
+
     Print out1("[*] Analysing ... ");
     out1.color_(F_YELLOW);
     out1.out_();
+
     do
     {
         static int i{-1};
@@ -303,6 +306,10 @@ inline void PWN<Parse_Mod>::analyze_()
     Print out2("[*] Analysing finished!");
     out2.color_(F_YELLOW);
     out2.out_();
+
+    //mod.show_node_list_();
+    this->round=mod.get_round_();
+    show_node_list_();
 }
 
 template <class Parse_Mod>
@@ -371,10 +378,8 @@ inline void PWN<Parse_Mod>::show_node_list_()
     }
 }
 
-
-
 template <class Parse_Mod>
-inline void PWN<Parse_Mod>::gengerate_()
+inline void PWN<Parse_Mod>::gengerate_(string file_name)
 {
     Print out;
     out.color_(F_YELLOW);
@@ -382,7 +387,7 @@ inline void PWN<Parse_Mod>::gengerate_()
     sleep(1);
     int i{0};
     ofstream outfile;
-    outfile.open("exploit.py");
+    outfile.open(file_name);
     outfile << "#!/usr/bin/python\n";
     outfile << "#======PWNlib Script=======\n";
     outfile << "from pwn import *\n";
@@ -437,6 +442,13 @@ inline void PWN<Parse_Mod>::gengerate_()
 
     outfile << "p.interactive()";
     out.out_("[+] generate finish");
+
+}
+
+template <class Parse_Mod>
+inline void PWN<Parse_Mod>::gengerate_()
+{
+    gengerate_("exploit.py");
 }
 /*
 inline string select_line(string str,int x)

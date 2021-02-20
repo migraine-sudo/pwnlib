@@ -122,9 +122,15 @@ inline string Auto_Mod::recv_(string str)
 
 inline string Auto_Mod::send_(int i)
 {
-    insert_node_list_(seed[i]);  // insert seed[i] and this->last_data
+    /*
+    if(i!=0 && i+1 < seed.size())            //repair some bug...
+        insert_node_list_(seed[i+1]);        // insert seed[i] and this->last_data
+    else
+        insert_node_list_(seed[i]);
+    */
+    insert_node_list_(seed[this->round]);     //improve Accuracy
     if (i < seed.size())
-        return seed[i];
+        return seed[this->round];
     else
         abort_();
 }
