@@ -8,6 +8,7 @@
 #include "Mstring.h"
 #include <string>
 #include <vector>
+#include <unistd.h>
 
 /*
  * LIST : Auto_Mod(develping)  Half_Auto_Mod

@@ -17,13 +17,13 @@ $(TARGET):
 
 #Demo
 demo_auto_debug: demo_auto.cc
-	$(CXX) demo_auto.cc -o auto_pwn --std=c++11 -D__DEBUG__ -w
+	$(CXX) demo_auto.cc -o auto_pwn --std=c++11 -D__DEBUG__ -w $(INCLUDE)
 
 demo_auto_release: demo_auto.cc
-	$(CXX) demo_auto.cc -o auto_pwn --std=c++11 -w
+	$(CXX) demo_auto.cc -o auto_pwn --std=c++11 -w $(INCLUDE)
 
 demo_half_auto_debug: demo_half_auto.cc
-	$(CXX) demo_half_auto.cc -o half_auto_pwn --std=c++11 -D__DEBUG__ -w
+	$(CXX) demo_half_auto.cc -o half_auto_pwn --std=c++11 -D__DEBUG__ -w $(INCLUDE)
 
 
 clean:

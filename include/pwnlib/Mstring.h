@@ -2,6 +2,10 @@
 #define __M_STRING__
 
 #include <algorithm>
+#include <vector>
+
+using namespace std;
+
 namespace mstr{
 
 template <class T>

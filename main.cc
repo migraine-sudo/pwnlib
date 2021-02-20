@@ -5,11 +5,13 @@ exploit code generation framework.
 Have fun!
 Author : Migraine-sudo
 */
-
+/*
 #include "source/pwnlib.h"
 #include "source/parse.h"
 #include "source/print.h"
 #include "source/Myaml.h"
+*/
+#include <pwn.h>
 #include <iostream>
 #include <string>
 using namespace std;
