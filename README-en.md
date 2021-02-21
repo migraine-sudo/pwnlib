@@ -14,9 +14,9 @@ Based on the C++11 standard under the Linux platform, a quick utilization script
 
 The program is still under development and currently contains two modes, Half_Auto_Mod and Auto_Mod.
 
--The former requires the user to fill in the corresponding input for the menu, and after the complete menu function is over, enter finish to help the program determine the end of a cycle, and then enter quit to complete the entire program.
+- The former requires the user to fill in the corresponding input for the menu, and after the complete menu function is over, enter finish to help the program determine the end of a cycle, and then enter quit to complete the entire program.
 
--The latter is the automatic completion of program analysis and script generation. It is due to the binary file. The accuracy varies from question to question. Below is a demonstration of the usage of these two modes and a simple tutorial.
+- The latter is the automatic completion of program analysis and script generation. It is due to the binary file. The accuracy varies from question to question. Below is a demonstration of the usage of these two modes and a simple tutorial.
 
 
 Run screenshot
@@ -136,21 +136,21 @@ Provide some own String operation methods
 ## Update progress
 
 **v0.0.3(2021.2.22)**
--Develop yaml custom configuration exploit based on yaml-cpp (30% progress)
+- Develop yaml custom configuration exploit based on yaml-cpp (30% progress)
 
 **v0.0.2(2021.2.18)**
--Added Mstring.h library to provide some own String methods
--Add Traverse_string to increase the judgment accuracy of the automatic module
+- Added Mstring.h library to provide some own String methods
+- Add Traverse_string to increase the judgment accuracy of the automatic module
 
 **v0.0.1(2021.2.17)**
--Project creation, edit README
--Create demo section
+- Project creation, edit README
+- Create demo section
 
 
 ## Need to improve
 
--The software structure is more complicated, especially the coupling between PWN and Parse_Mod modules is very high (the reason is that I wanted to improve the scalability through Parse_Mod at the beginning, but the result increased the complexity of the PWN module).
--Currently there is no support for yaml file customization of exploit scripts. (Added, added)
--FUZZ mode has not been developed yet, it is expected to automatically generate poc
--The use of Unicorn to run ELF of other architectures is not yet supported
--The source code directory needs to be adjusted (many core codes are still written in the header file)
+- The software structure is more complicated, especially the coupling between PWN and Parse_Mod modules is very high (the reason is that I wanted to improve the scalability through Parse_Mod at the beginning, but the result increased the complexity of the PWN module).
+- Currently there is no support for yaml file customization of exploit scripts. (Added, added)
+- FUZZ mode has not been developed yet, it is expected to automatically generate poc
+- The use of Unicorn to run ELF of other architectures is not yet supported
+- The source code directory needs to be adjusted (many core codes are still written in the header file)
