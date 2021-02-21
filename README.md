@@ -82,21 +82,49 @@
 
 ### PWN
 
-提供核心方法：
+头文件目录：***/include/pwnlib.h***
+
+提供核心PWN框架的核心方法，包括但不限于加载二进制程序、接收交互输出、发送交互数据、调用Parse_Mode模块自动化分析、脚本生成等功能。
+
+*目前版本函数展示*
+
+```
+    bool load_();
+    char *recv_();
+    char *recv_line_();
+    bool send_(string str);
+    bool send_line_(string str);
+    void analyze_();
+    void analyze_manual_();
+    void show_node_list_();
+    void gengerate_();
+    void gengerate_(string file_name);
+```
 
 
 ### Parse_Mode
 
-辅助分析模块，可编写扩展的接口。
+头文件目录：***/include/parse.h***
+
+辅助分析模块，作为**模板参数**嵌入PWN类中，为PWN模块的analyse函数提供分析逻辑支持。使用者可以通过重载函数recv_(),send_()，为程序编准确度/自动化更好的分析逻辑。
 
 **Half Auto Mod**
 
-警告：在半自动模式下，如果不使用Debug参数进行编译，则在运行程序时将看不到交互信息。当然，程序会提示您提供编译选项，如图所示
+半自动模式，需要用户使用**pwnlib shell**与程序进行交互。参数介绍
+
+**help 或者 h** : 打印帮助参数。
+
+**finish 或者 f** : 当一次输入循环完成（即回到开始菜单的时候），输入finish作为标记，帮助程序判断是否一次循环结束。*当然，我的AI也会提醒您，如果她运转良好的话。*
+
+**quit 或者 q** : 完成分析，进入下一步操作（脚本生成）。
+
+>警告：在半自动模式下，如果不使用Debug参数进行编译，则在运行程序时将看不到交互信息。当然，程序会提示您提供编译选项，如图所示
 
 ![EPLKkx](https://gitee.com/p0kerface/blog_image_management/raw/master/uPic/EPLKkx.png)
 
 **Auto Mod**
 
+全自动化分析模式，不需要和二进制文件进行交互，通过程序自动分析反馈数据来猜测当前执行进度，仍然在为了提高精确度而不断努力中。
 
 ### Print
 
@@ -127,3 +155,4 @@
 - 目前还不支持yaml文件对exploit脚本自定义。（在加了，在加了）
 - FUZZ模式还没开发，预计能够自动生成poc
 - 还不支持使用Unicorn来运行其他架构的ELF 
+- 源代码目录需要调整（现在很多核心代码都还写在头文件中）
