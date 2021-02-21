@@ -6,7 +6,7 @@ DEBUG = -D__DEBUG__
 CFLAGS = $(DEBUG) --std=c++11 -w
 RM = rm -rf
 
-VERSION = 0.0.2
+VERSION = 0.0.3
 TARGET = pwn.$(VERSION)
 OBJS = main.cc
 INCLUDE = -I include/

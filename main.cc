@@ -23,7 +23,12 @@ int main()
     //Customize functions by writing defaults or defining templates
     //For Example,
 
-    //M_Yaml yaml;
+    M_Yaml yaml;
+    yaml.load_all_files();
+    yaml.get_owner_path();
+    //cout << yaml.get_execu_path() << endl;
+    cout << yaml.get_config_file_path(1) << endl;
+    //yaml.load_file_();
     cout << "Input your file << ";
     cin >> exec_path;
     PWN<Auto_Mod> *p = new PWN<Auto_Mod>(exec_path);
